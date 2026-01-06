@@ -10,7 +10,7 @@ services:
       - N8N_ENCRYPTION_KEY=local_dev_key
       - GENERIC_TIMEZONE=${TZ:-Europe/Paris}
       - TZ=${TZ:-Europe/Paris}
-      - WEBHOOK_URL=${WEBHOOK_URL}
+      - WEBHOOK_URL=${NGROK_URL}
     volumes:
       - n8n_data_local:/home/node/.n8n
 
