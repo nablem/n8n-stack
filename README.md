@@ -62,7 +62,7 @@ This stack is designed for reliability and performance:
 You can also run a lightweight version of n8n locally (SQLite, no workers, no Traefik).
 
 ## 1. Basic Launch
-Ensure you have a `.env` file.
+Ensure project folder is created (`git clone`) and you have a `.env` file.
 ```bash
 docker compose -f docker-compose.dev.yaml up -d
 ```
