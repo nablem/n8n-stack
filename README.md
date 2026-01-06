@@ -31,6 +31,9 @@ EMAIL_SSL=your-email@example.com
 POSTGRES_USER=n8n_admin
 POSTGRES_PASSWORD=choose_a_strong_password
 
+# Timezone
+TZ=Europe/Paris
+
 # n8n Security
 # Generate a random string for encryption
 N8N_ENCRYPTION_KEY=your_random_string_here

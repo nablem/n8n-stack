@@ -29,12 +29,22 @@ services:
       - POSTGRES_DB=n8n
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d n8n"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   redis:
     image: redis:alpine
     restart: always
     volumes:
       - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   n8n:
     image: n8nio/n8n:latest
@@ -49,11 +59,15 @@ services:
       - WEBHOOK_URL=https://${HOST}/
       - EXECUTIONS_MODE=queue
       - QUEUE_BULL_REDIS_HOST=redis
+      - GENERIC_TIMEZONE=${TZ:-UTC}
+      - TZ=${TZ:-UTC}
     volumes:
       - n8n_data:/home/node/.n8n
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.n8n.rule=Host(`${HOST}`)"
@@ -72,11 +86,19 @@ services:
       - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
       - EXECUTIONS_MODE=queue
       - QUEUE_BULL_REDIS_HOST=redis
+      - GENERIC_TIMEZONE=${TZ:-UTC}
+      - TZ=${TZ:-UTC}
+    deploy:
+      resources:
+        limits:
+          memory: 2G
     volumes:
       - n8n_data:/home/node/.n8n
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
 volumes:
   n8n_data:
