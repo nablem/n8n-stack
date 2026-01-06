@@ -48,6 +48,14 @@ Launch the entire stack in the background:
 ```bash
 docker compose up -d
 ```
+To check logs and ensure services is running properly:
+```bash
+docker-compose -f docker-compose.dev.yaml logs -f
+```
+To shut down services:
+```bash
+docker-compose -f docker-compose.dev.yaml down
+```
 
 ## Architecture
 
