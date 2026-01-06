@@ -18,12 +18,17 @@ chmod 600 letsencrypt/acme.json
 ```
 
 ### 2. Configuration
-Create a .env file in the root directory to store your credentials. Do not share this file.
+Create a `.env` file in the root directory to store your credentials (you can also copy the template from `.env.example`).
+
+Do not share this file.
 ```bash
 nano .env
 ```
 Paste and edit the following:
 ```bash
+# Timezone
+TZ=Europe/Paris
+
 # Domain and SSL
 HOST=n8n.yourdomain.com
 EMAIL_SSL=your-email@example.com
@@ -32,11 +37,7 @@ EMAIL_SSL=your-email@example.com
 POSTGRES_USER=n8n_admin
 POSTGRES_PASSWORD=choose_a_strong_password
 
-# Timezone
-TZ=Europe/Paris
-
-# n8n Security
-# Generate a random string for encryption
+# n8n security: generate a random string for encryption
 N8N_ENCRYPTION_KEY=your_random_string_here
 ```
 ### 3. Deploy
@@ -53,3 +54,15 @@ This stack is designed for reliability and performance:
 * n8n-worker: A dedicated service to handle heavy execution tasks, keeping the UI responsive.
 * PostgreSQL 16: Persistent storage for workflows and execution data.
 * Redis: High-performance message broker for the n8n queue mode.
+
+# Dev environment
+To start the n8n service locally:
+```bash
+docker compose -f docker-compose.dev.yaml up -d
+```
+If webhooks need testing, run ngrok on n8n port:
+```bash
+ngrok http 5678
+```
+Then  re-run the `docker compose` command.
+
