@@ -8,7 +8,8 @@ Ensure you have Docker and Docker Compose installed. You will also need a domain
 
 ```bash
 # Create project folder
-mkdir n8n-stack && cd n8n-stack
+git clone https://github.com/votre-pseudo/n8n-stack.git
+cd n8n-stack
 
 # Create SSL storage file with correct permissions
 mkdir letsencrypt
