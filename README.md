@@ -28,19 +28,24 @@ nano .env
 
 Edit the following:
 ```
-# Timezone
-TZ=Europe/Paris
-
-# Domain and SSL
+# -- DOMAIN --
 HOST=n8n.yourdomain.com
 EMAIL_SSL=your-email@example.com
 
-# Database
+# -- DATABASE --
 POSTGRES_USER=n8n_admin
 POSTGRES_PASSWORD=choose_a_strong_password
 
-# n8n security: generate a random string for encryption
+# -- N8N CONFIG --
 N8N_ENCRYPTION_KEY=your_random_string_here
+
+# -- SMTP (Optional but recommended for "Forgot Password") --
+N8N_EMAIL_MODE=smtp
+N8N_SMTP_HOST=smtp.sendgrid.net
+N8N_SMTP_PORT=587
+N8N_SMTP_USER=apikey
+N8N_SMTP_PASS=SG.xxxxx...
+N8N_SMTP_SENDER=admin@client-site.com
 ```
 
 ### 3. Deploy
@@ -48,18 +53,22 @@ Launch the entire stack in the background:
 ```bash
 docker compose up -d
 ```
+For small projects, just run the mini version (n8n monolith).
+```bash
+docker compose -f docker-compose.mini.yaml up -d
+```
 To check logs and ensure services is running properly:
 ```bash
-docker-compose -f docker-compose.dev.yaml logs -f
+docker-compose -f docker-compose.yaml logs -f
 ```
 To shut down services:
 ```bash
-docker-compose -f docker-compose.dev.yaml down
+docker-compose -f docker-compose.yaml down
 ```
 
 ## Architecture
 
-This stack is designed for reliability and performance:
+The full stack is designed for reliability and performance:
 * **Traefik v2.10**: Acts as a reverse proxy and handles SSL certificates automatically.
 * **n8n (Main)**: The primary web interface and workflow designer.
 * **n8n-worker**: A dedicated service to handle heavy execution tasks, keeping the UI responsive.

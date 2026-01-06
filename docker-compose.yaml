@@ -48,19 +48,27 @@ services:
     image: n8nio/n8n:latest
     restart: always
     environment:
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+      - N8N_HOST=${HOST}
+      - WEBHOOK_URL=https://${HOST}
       - DB_TYPE=postgresdb
       - DB_POSTGRESDB_HOST=postgres
       - DB_POSTGRESDB_USER=${POSTGRES_USER}
       - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
-      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
-      - N8N_HOST=${HOST}
-      - WEBHOOK_URL=https://${HOST}/
       - EXECUTIONS_MODE=queue
       - QUEUE_BULL_REDIS_HOST=redis
-      - GENERIC_TIMEZONE=${TZ:-UTC}
-      - TZ=${TZ:-UTC}
       - N8N_RUNNERS_MODE=external
       - N8N_RUNNERS_TASK_BROKER_URI=redis://redis:6379/0
+      - N8N_EMAIL_MODE=smtp
+      - N8N_SMTP_HOST=${SMTP_HOST}
+      - N8N_SMTP_PORT=${SMTP_PORT}
+      - N8N_SMTP_USER=${SMTP_USER}
+      - N8N_SMTP_PASS=${SMTP_PASS}
+      - N8N_SMTP_SENDER=${SMTP_SENDER}
+      - N8N_SMTP_SSL=false
+      - GENERIC_TIMEZONE=${TZ:--Europe/Paris}
+      - TZ=${TZ:-UTC}
+
     volumes:
       - n8n_data:/home/node/.n8n
     depends_on:
@@ -73,23 +81,31 @@ services:
       - "traefik.http.routers.n8n.rule=Host(`${HOST}`)"
       - "traefik.http.routers.n8n.entrypoints=websecure"
       - "traefik.http.routers.n8n.tls.certresolver=myresolver"
+      - "traefik.http.services.n8n.loadbalancer.server.port=5678"
 
   n8n-worker:
     image: n8nio/n8n:latest
     restart: always
     command: worker
     environment:
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
       - DB_TYPE=postgresdb
       - DB_POSTGRESDB_HOST=postgres
       - DB_POSTGRESDB_USER=${POSTGRES_USER}
       - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
-      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
       - EXECUTIONS_MODE=queue
       - QUEUE_BULL_REDIS_HOST=redis
-      - GENERIC_TIMEZONE=${TZ:-UTC}
-      - TZ=${TZ:-UTC}
       - N8N_RUNNERS_MODE=external
       - N8N_RUNNERS_TASK_BROKER_URI=redis://redis:6379/0
+      - N8N_EMAIL_MODE=smtp
+      - N8N_SMTP_HOST=${SMTP_HOST}
+      - N8N_SMTP_PORT=${SMTP_PORT}
+      - N8N_SMTP_USER=${SMTP_USER}
+      - N8N_SMTP_PASS=${SMTP_PASS}
+      - N8N_SMTP_SENDER=${SMTP_SENDER}
+      - N8N_SMTP_SSL=false
+      - GENERIC_TIMEZONE=${TZ:-UTC}
+      - TZ=${TZ:-UTC}
     deploy:
       resources:
         limits:
