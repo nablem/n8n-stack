@@ -1,4 +1,4 @@
-# n8n Docker Stack (Self-Hosted)
+# n8n Docker stack (self-hosted)
 
 A production-ready Docker Compose setup for **n8n** using **Traefik** for automatic SSL (Let's Encrypt), **PostgreSQL** as the database, and **Redis** for queue management (scaling with workers).
 
