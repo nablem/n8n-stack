@@ -58,6 +58,7 @@ services:
       - N8N_SMTP_USER=${N8N_SMTP_USER}
       - N8N_SMTP_PASS=${N8N_SMTP_PASS}
       - N8N_SMTP_SENDER=${N8N_SMTP_SENDER}
+      - N8N_SMTP_SSL=false
 
     # Note: No 'ports' section here. It is safer.
     # Traefik talks to n8n internally via Docker network.
