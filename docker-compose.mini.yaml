@@ -28,7 +28,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=n8n
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d n8n"]
       interval: 5s
@@ -64,7 +64,7 @@ services:
     # Traefik talks to n8n internally via Docker network.
 
     volumes:
-      - n8n_data:/home/node/.n8n
+      - ./n8n_data:/home/node/.n8n
     depends_on:
       postgres:
         condition: service_healthy
@@ -74,7 +74,3 @@ services:
       - "traefik.http.routers.n8n.entrypoints=websecure"
       - "traefik.http.routers.n8n.tls.certresolver=myresolver"
       - "traefik.http.services.n8n.loadbalancer.server.port=5678"
-
-volumes:
-  postgres_data:
-  n8n_data:
